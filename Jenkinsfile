@@ -40,7 +40,6 @@ pipeline {
                     junit "${env.SERVICE}/target/surefire-reports/*.xml"
                     jacoco execPattern: "${env.SERVICE}/target/jacoco.exec"
                 }
-                echo "end testing..."
             }
         }
         stage('Build') {
