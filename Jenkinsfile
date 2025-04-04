@@ -16,11 +16,11 @@ pipeline {
                     def changedFiles = sh(script: "git diff --name-only HEAD~1", returnStdout: true).trim()
                     
                     if (changedFiles.contains('customers-service/')) {
-                        env.SERVICE = 'customers-service'
+                        env.SERVICE = 'spring-petclinic-customers-service'
                     } else if (changedFiles.contains('vets-service/')) {
-                        env.SERVICE = 'vets-service'
+                        env.SERVICE = 'spring-petclinic-vets-service'
                     } else if (changedFiles.contains('visit-service/')) {
-                        env.SERVICE = 'visit-service'
+                        env.SERVICE = 'spring-petclinic-visit-service'
                     } else {
                         env.SERVICE = 'none'
                     }
@@ -32,16 +32,16 @@ pipeline {
                 expression { env.SERVICE != 'none' }
             }
             steps {
-                // sh "cd ${env.SERVICE} && mvn test"
+                sh "cd ${env.SERVICE} && ../mvnw test"
                 echo "testing... ${env.SERVICE}"
             }
-            // post {
-            //     // always {
-            //     //     junit "${env.SERVICE}/target/surefire-reports/*.xml"
-            //     //     jacoco execPattern: "${env.SERVICE}/target/jacoco.exec"
-            //     // }
-            //     echo "end testing..."
-            // }
+            post {
+                always {
+                    junit "${env.SERVICE}/target/surefire-reports/*.xml"
+                    jacoco execPattern: "${env.SERVICE}/target/jacoco.exec"
+                }
+                echo "end testing..."
+            }
         }
         stage('Build') {
             when {
