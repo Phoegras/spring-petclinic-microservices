@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.vets.model;
 
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -37,5 +38,29 @@ public class VetRepositoryTests {
     void shouldReturnEmptyWhenNoVets() {
         List<Vet> vets = vetRepository.findAll();
         assertTrue(vets.isEmpty());
+    }
+    
+    @Test
+    void shouldThrowConstraintViolationExceptionWhenFirstNameIsBlank() {
+        String lastName = "Smith";
+        Vet vet = new Vet();
+        vet.setFirstName(""); // invalid
+        vet.setLastName(lastName);
+
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            vetRepository.saveAndFlush(vet); // use saveAndFlush to trigger validation immediately
+        });
+    }
+
+    @Test
+    void shouldThrowConstraintViolationExceptionWhenLastNameIsBlank() {
+        String firstName = "Jane";
+        Vet vet = new Vet();
+        vet.setFirstName(firstName);
+        vet.setLastName(""); // invalid
+
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> {
+            vetRepository.saveAndFlush(vet);
+        });
     }
 }
