@@ -10,7 +10,7 @@ public class VetTests {
 
     @Test
     void shouldAddSpecialtyToVet() {
-        const String specialtyName = "Dentistry";
+        String specialtyName = "Dentistry";
         Vet vet = new Vet();
         Specialty specialty = new Specialty();
         specialty.setName(specialtyName);
