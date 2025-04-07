@@ -9,13 +9,44 @@ import static org.junit.jupiter.api.Assertions.*;
 public class VetTests {
 
     @Test
-    public void shouldAddAndGetSpecialties() {
+    void shouldAddSpecialtyToVet() {
+        const String specialtyName = "Dentistry";
         Vet vet = new Vet();
-        Specialty s1 = new Specialty();
-        s1.setName("surgery");
+        Specialty specialty = new Specialty();
+        specialty.setName(specialtyName);
 
+        vet.addSpecialty(specialty);
+
+        List<Specialty> specialties = vet.getSpecialties();
+        assertEquals(1, specialties.size());
+        assertEquals(specialtyName, specialties.get(0).getName());
+    }
+
+    @Test
+    public void shouldReturnCorrectFullName() {
+        String firstName = "John";
+        String lastName = "Doe";
+        int id = 1;
+        Vet vet = new Vet();
+        vet.setFirstName(firstName);
+        vet.setLastName(lastName);
+        vet.setId(id);
+
+        assertEquals(firstName, vet.getFirstName());
+        assertEquals(lastName, vet.getLastName());
+        assertEquals(id, vet.getId());
+    }
+
+    @Test
+    void shouldSortSpecialtiesByName() {
+        String specialtyName1 = "Zoology";
+        String specialtyName2 = "Dentistry";
+        Vet vet = new Vet();
+
+        Specialty s1 = new Specialty();
+        s1.setName(specialtyName1);
         Specialty s2 = new Specialty();
-        s2.setName("dentistry");
+        s2.setName(specialtyName2);
 
         vet.addSpecialty(s1);
         vet.addSpecialty(s2);
@@ -23,37 +54,7 @@ public class VetTests {
         List<Specialty> specialties = vet.getSpecialties();
 
         assertEquals(2, specialties.size());
-        assertTrue(specialties.stream().anyMatch(s -> "surgery".equals(s.getName())));
-        assertTrue(specialties.stream().anyMatch(s -> "dentistry".equals(s.getName())));
-    }
-
-    @Test
-    public void shouldSetAndGetVetProperties() {
-        Vet vet = new Vet();
-        vet.setFirstName("John");
-        vet.setLastName("Doe");
-        vet.setId(1);
-
-        assertEquals("John", vet.getFirstName());
-        assertEquals("Doe", vet.getLastName());
-        assertEquals(1, vet.getId());
-    }
-
-    @Test
-    void shouldAddAndSortSpecialties() {
-        Specialty s1 = new Specialty();
-        s1.setName("Surgery");
-
-        Specialty s2 = new Specialty();
-        s2.setName("Dentistry");
-
-        Vet vet = new Vet();
-        vet.addSpecialty(s1);
-        vet.addSpecialty(s2);
-
-        List<Specialty> sorted = vet.getSpecialties();
-        assertThat(sorted).hasSize(2);
-        assertThat(sorted.get(0).getName()).isEqualTo("Dentistry");
-        assertThat(sorted.get(1).getName()).isEqualTo("Surgery");
+        assertEquals(specialtyName2, specialties.get(0).getName());
+        assertEquals(specialtyName1, specialties.get(1).getName());
     }
 }

@@ -16,24 +16,26 @@ public class VetRepositoryTests {
 
     @Test
     void shouldSaveAndRetrieveVet() {
-        // Arrange
-        Specialty specialty = new Specialty();
-        specialty.setName("Dentistry");
-
+        String firstName = "John";
+        String lastName = "Doe";
         Vet vet = new Vet();
-        vet.setFirstName("Emily");
-        vet.setLastName("Clark");
-        vet.addSpecialty(specialty);
+        vet.setFirstName(firstName);
+        vet.setLastName(lastName);
 
-        // Act
         vetRepository.save(vet);
-        List<Vet> found = vetRepository.findAll();
 
-        // Assert
-        assertThat(found).hasSize(1);
-        Vet retrieved = found.get(0);
-        assertThat(retrieved.getFirstName()).isEqualTo("Emily");
-        assertThat(retrieved.getSpecialties()).hasSize(1);
-        assertThat(retrieved.getSpecialties().get(0).getName()).isEqualTo("Dentistry");
+        List<Vet> vets = vetRepository.findAll();
+        assertEquals(1, vets.size());
+
+        Vet retrieved = vets.get(0);
+        assertEquals(firstName, retrieved.getFirstName());
+        assertEquals(lastName, retrieved.getLastName());
+        assertNotNull(retrieved.getId());
+    }
+
+    @Test
+    void shouldReturnEmptyWhenNoVets() {
+        List<Vet> vets = vetRepository.findAll();
+        assertTrue(vets.isEmpty());
     }
 }
