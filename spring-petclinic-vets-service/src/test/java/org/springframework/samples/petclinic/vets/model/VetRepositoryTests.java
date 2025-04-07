@@ -15,14 +15,25 @@ public class VetRepositoryTests {
     private VetRepository vetRepository;
 
     @Test
-    public void testSaveAndFindVet() {
+    void shouldSaveAndRetrieveVet() {
+        // Arrange
+        Specialty specialty = new Specialty();
+        specialty.setName("Dentistry");
+
         Vet vet = new Vet();
-        vet.setFirstName("Lisa");
-        vet.setLastName("Cuddy");
+        vet.setFirstName("Emily");
+        vet.setLastName("Clark");
+        vet.addSpecialty(specialty);
 
+        // Act
         vetRepository.save(vet);
+        List<Vet> found = vetRepository.findAll();
 
-        List<Vet> vets = vetRepository.findAll();
-        assertThat(vets).extracting(Vet::getFirstName).contains("Lisa");
+        // Assert
+        assertThat(found).hasSize(1);
+        Vet retrieved = found.get(0);
+        assertThat(retrieved.getFirstName()).isEqualTo("Emily");
+        assertThat(retrieved.getSpecialties()).hasSize(1);
+        assertThat(retrieved.getSpecialties().get(0).getName()).isEqualTo("Dentistry");
     }
 }

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class VetTests {
 
     @Test
-    public void testAddAndGetSpecialties() {
+    public void shouldAddAndGetSpecialties() {
         Vet vet = new Vet();
         Specialty s1 = new Specialty();
         s1.setName("surgery");
@@ -28,7 +28,7 @@ public class VetTests {
     }
 
     @Test
-    public void testSettersAndGetters() {
+    public void shouldSetAndGetVetProperties() {
         Vet vet = new Vet();
         vet.setFirstName("John");
         vet.setLastName("Doe");
@@ -37,5 +37,23 @@ public class VetTests {
         assertEquals("John", vet.getFirstName());
         assertEquals("Doe", vet.getLastName());
         assertEquals(1, vet.getId());
+    }
+
+    @Test
+    void shouldAddAndSortSpecialties() {
+        Specialty s1 = new Specialty();
+        s1.setName("Surgery");
+
+        Specialty s2 = new Specialty();
+        s2.setName("Dentistry");
+
+        Vet vet = new Vet();
+        vet.addSpecialty(s1);
+        vet.addSpecialty(s2);
+
+        List<Specialty> sorted = vet.getSpecialties();
+        assertThat(sorted).hasSize(2);
+        assertThat(sorted.get(0).getName()).isEqualTo("Dentistry");
+        assertThat(sorted.get(1).getName()).isEqualTo("Surgery");
     }
 }

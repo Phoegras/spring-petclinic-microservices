@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SpecialtyTests {
 
     @Test
-    public void testSettersAndGetters() {
+    public void shouldSetAndGetSpecialtyProperties() {
         Specialty specialty = new Specialty();
         specialty.setName("radiology");
 
