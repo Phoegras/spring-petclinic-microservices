@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server
+  template:
+    metadata:
+      labels:
+        app: config-server
+    spec:
+      containers:
+        - name: {{ .Values.config-server.image }}
+          image: "{{ .Values.global.image.repository }}/spring-petclinic-config-server:{{ .Values.config-server.tag }}"
+          ports:
+            - containerPort: {{ .Values.services.config-server.port }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+            - name: GIT_REPO
+              value: https://github.com/Phoegras/spring-petclinic-microservices.git
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server
+  namespace: {{ .Values.namespace }}
+spec:
+  type: NodePort
+  selector:
+    app: {{ .Values.config-server.image }}
+  ports:
+    - port: {{ .Values.services.config-server.port }}
+      targetPort: {{ .Values.services.config-server.port }}
+      nodePort: {{ .Values.services.config-server.nodePort }}
+

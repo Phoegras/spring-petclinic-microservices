@@ -1,0 +1,35 @@
+global:
+  imagePullPolicy: IfNotPresent
+  dockerRepo: springcommunity
+  configServerUrl: http://config-server:8888
+
+config-server:
+  image: config-server
+  tag: latest
+  port: 8888
+
+discovery-server:
+  image: discovery-server
+  tag: latest
+  port: 8761
+
+vets-service:
+  image: vets-service
+  tag: latest
+  port: 8083
+
+customers-service:
+  image: customers-service
+  tag: latest
+  port: 8081
+
+api-gateway:
+  image: api-gateway
+  tag: latest
+  port: 8080
+
+ingress:
+  enabled: true
+  host: staging.example.com
+  name: api-gateway
+  port: 8080

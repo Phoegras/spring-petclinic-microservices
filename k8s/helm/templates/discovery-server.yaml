@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discovery-server
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discovery-server
+  template:
+    metadata:
+      labels:
+        app: discovery-server
+    spec:
+      containers:
+        - name: {{ .Values.discovery-server.image }}
+          image: "{{ .Values.global.image.repository }}/spring-petclinic-discovery-server:{{ .Values.discovery-server.tag }}"
+          ports:
+            - containerPort: {{ .Values.services.discovery-server.port }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+            - name: EUREKA_INSTANCE_HOSTNAME
+              value: {{ .Values.discovery-server.image }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discovery-server
+  namespace: {{ .Values.namespace }}
+spec:
+  type: NodePort
+  selector:
+    app: {{ .Values.discovery-server.image }}
+  ports:
+    - port: {{ .Values.services.discovery-server.port }}
+      targetPort: {{ .Values.services.discovery-server.port }}
+      nodePort: {{ .Values.services.discovery-server.nodePort }}

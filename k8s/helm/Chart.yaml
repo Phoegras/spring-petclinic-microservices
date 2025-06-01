@@ -1,0 +1,19 @@
+apiVersion: v2
+name: spring-petclinic
+description: Helm chart for Spring Petclinic Microservices
+type: application
+version: 0.1.0
+appVersion: "1.0"
+# dependencies:
+#   - name: discovery-server
+#     version: 0.1.0
+#     repository: file://charts/discovery-server
+#   - name: config-server
+#     version: 0.1.0
+#     repository: file://charts/config-server
+#   - name: api-gateway
+#     version: 0.1.0
+#     repository: file://charts/api-gateway
+#   - name: customers-service
+#     version: 0.1.0
+#     repository: "file://charts/customers-service"

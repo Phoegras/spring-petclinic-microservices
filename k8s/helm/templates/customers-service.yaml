@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customers-service
+  labels:
+    app: customers-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customers-service
+  template:
+    metadata:
+      labels:
+        app: customers-service
+    spec:
+      containers:
+        - name: {{ .Values.customers-service.image }}
+          image: "{{ .Values.global.image.repository }}/{{ .Values.global.image.name }}:{{ .Values.customers-service.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.services.customers-service.port }}
+          resources:
+            limits:
+              memory: "512Mi"
+          env:
+            - name: EUREKA_INSTANCE_HOSTNAME
+              value: {{ .Values.customers-service.image }}
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker"
+            - name: CONFIG_SERVER_URI
+              value: "http://config-server:8888"
+            - name: EUREKA_SERVER_URI
+              value: "http://discovery-server:8761/eureka/"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customers-service
+  namespace: {{ .Values.namespace }}
+spec:
+  type: NodePort
+  selector:
+    app: customers-service
+  ports:
+    - port: {{ .Values.services.discovery-server.port }}
+      targetPort: {{ .Values.services.discovery-server.port }}
+      nodePort: {{ .Values.services.discovery-server.nodePort }}
